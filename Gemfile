@@ -2,10 +2,8 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.1.3'
 
-# Bundle edge Rails instead:
-# gem 'rails',     :git => 'git://github.com/rails/rails.git'
-
-gem 'sqlite3'
+gem 'thin'
+gem 'pg'
 
 
 # Gems used only for assets and not required
@@ -33,4 +31,15 @@ gem 'jquery-rails'
 group :test do
   # Pretty printed test output
   gem 'turn', '0.8.2', :require => false
+  gem 'rspec-rails', '>= 2.8.1'
+  gem 'awesome_print'
+  gem 'interactive_editor'
+  gem 'shoulda'
+  gem 'syntax'
+  gem 'capybara'
+  gem 'launchy'
+  gem 'factory_girl_rails', '~> 1.3.0'
+  gem 'forgery', '0.3.12'
+  gem "rspec-cells"
+  gem 'guard-rspec'
 end
