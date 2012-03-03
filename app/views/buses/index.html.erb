@@ -6,6 +6,9 @@
 			<li>Time:<%= bus.time %></li>
 			<li>Lat:<%= bus.lat %></li>
 			<li>Lon:<%= bus.lon %></li>
+			<li>
+					<img src=<%= "./tmp/map_#{bus.id}.png" %> />
+			</li>
 		</ul>
 	<% end %>
 <% end %>

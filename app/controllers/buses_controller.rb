@@ -5,6 +5,14 @@ class BusesController < ApplicationController
   	if @buses.blank?
   		flash[:notice] = "Sorry, no buses where found on the given route"
   	end
+
+  	@buses.each do |bus|
+	  	File.new("./tmp/map_#{bus.id}.png", "w+") do |f|
+				f.write(bus.static_map)
+				f.save
+				f.close
+			end
+		end
   end
 
   def show
