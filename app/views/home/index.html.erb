@@ -23,6 +23,8 @@
 
 
         function success(position) {
+			$('input[name=userLat]').val(position.coords.latitude);
+			$('input[name=userLong]').val(position.coords.longitude);
           var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
           var myOptions = {
             zoom: 15,
@@ -62,6 +64,9 @@
                 <label for="comments">Comments</label>
                 <textarea id="comments" name="comments" value=""></textarea>
 
+                <input type="hidden" name="userLat" value="">
+                <input type="hidden" name="userLong" value="">
+                
                 <input type="submit" value="Report" />
             </form>
 
