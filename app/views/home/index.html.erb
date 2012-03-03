@@ -12,14 +12,13 @@
 <script type="text/javascript">
 
         $(document).ready(function() {
-
-            //$('#findme').click(function() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(success, error);
-                } else {
-                    error('Geolocation not supported');
-                }
-            //});
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(success, error);
+            } else {
+                error('Geolocation not supported');
+            }
+            
         });  
 
 
@@ -46,6 +45,7 @@
           var errMsg = typeof msg == 'string' ? msg : "Geolocation failed";
           $('#msg').html(errMsg);
         }
+
     </script>
 
 </head>
@@ -55,27 +55,12 @@
             <h3>HRT Bus Report</h3>
         </div>
         <div data-role="content">
-            <form url="www.google.com" action="POST">
+            <form action="/" method="post" data-ajax="false">
                 <label for="routeNumber">Route Number</label>
-                <input id="routeNumber" type="text" value=""/>
-
-                <fieldset data-role="controlgroup">
-                    <legend>Report Type</legend>
-                        <input type="radio" name="reportType" id="radioOntime" value="ontime" checked="checked" />
-                        <label for="radioOntime">On Time</label>
-
-                        <input type="radio" name="reportType" id="radioLate" value="late"  />
-                        <label for="radioLate">Late</label>
-
-                        <input type="radio" name="reportType" id="radioEarly" value="early"  />
-                        <label for="radioEarly">Early</label>
-
-                        <input type="radio" name="reportType" id="radioOther" value="other"  />
-                        <label for="radioOther">Other</label>
-                </fieldset>
+                <input id="routeNumber" name="routeNumber" type="text" value=""/>
 
                 <label for="comments">Comments</label>
-                <textarea id="comments" value=""></textarea>
+                <textarea id="comments" name="comments" value=""></textarea>
 
                 <input type="submit" value="Report" />
             </form>
