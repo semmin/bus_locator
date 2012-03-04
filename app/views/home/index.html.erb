@@ -57,7 +57,8 @@
             <h3>HRT Bus Report</h3>
         </div>
         <div data-role="content">
-            <form action="/" method="post" data-ajax="false">
+            <%= render partial: "layouts/errors_for", locals: { object: @report || Report.new } %>
+            <form action="/reports" method="post" data-ajax="false">
                 <label for="routeNumber">Route Number</label>
                 <input id="routeNumber" name="routeNumber" type="text" value=""/>
 
