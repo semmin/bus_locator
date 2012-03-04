@@ -4,7 +4,7 @@ gem 'rails', '3.1.3'
 
 gem 'thin'
 gem 'pg'
-gem 'hrt_bus'
+gem 'hrt_bus', '0.0.5', :path => File.join(File.dirname(__FILE__), '/vendor/gems/hrt_bus-0.0.5')
 
 
 # Gems used only for assets and not required
