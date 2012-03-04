@@ -6,46 +6,25 @@
 	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css" />
 	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 	<script src="http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js"></script>
-	
+
 	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-    <%= javascript_include_tag "jquery.xdomainajax" %>
-	
+
 <script type="text/javascript">
-    //Declare global variables for latitude and longitude
-    var latitude;
-    var longitude;
 
-    $(document).ready(function () {
-        //Wire up search button click event handler
-        $('#buttonSearch').click(function () {
-            //Get the destination from the text input and URL encode it
-            var destination = encodeURI($('#textDestination').val());
-            //Create URL for google maps that will find the best route
-            var url = "http://maps.google.com/maps?saddr=" + $('input[name=userLat]').val() + "," + $('input[name=userLong]').val() + "&daddr=" + destination + "&dirflg=r";
-            //Use jQuery to get an HTML document from google maps using the URL
-            $.get(url, function (data) {
-                //Create a jQuery object using the response text
-                var googleDoc = $(data.responseText);
-                //Find the route number from the document
-                ///In order to do this, look for an html element that has the transit line style and get the inner HTML
-                var routeNumber = googleDoc.find('.trtline-name').html();
-                //Redirect to buses and pass the route
-                window.location = '/buses?route_id=' + routeNumber;
-            });
-        });
+        $(document).ready(function() {
+            
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(success, error);
+            } else {
+                error('Geolocation not supported');
+            }
+            
+        });  
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(success, error);
-        } else {
-            error('Geolocation not supported');
-        }
-        //});
-    });
 
         function success(position) {
 			$('input[name=userLat]').val(position.coords.latitude);
 			$('input[name=userLong]').val(position.coords.longitude);
-
           var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
           var myOptions = {
             zoom: 15,
@@ -78,7 +57,6 @@
             <h3>HRT Bus Report</h3>
         </div>
         <div data-role="content">
-
             <%= render partial: "layouts/errors_for", locals: { object: @report || Report.new } %>
             <form action="/reports" method="post" data-ajax="false">
                 <label for="routeNumber">Route Number</label>
@@ -91,30 +69,6 @@
                 <input type="hidden" name="userLong" value="">
                 
                 <input type="submit" value="Report" />
-
-            <form url="www.google.com" action="POST">
-                Destination
-                <input id="textDestination" type="text" value=""/>
-                <input id="buttonSearch" type="button" 
-                    value="search" />
-            
-                <fieldset data-role="controlgroup">
-                    <legend>Report Type</legend>
-                        <input type="radio" name="reportType" id="radioOntime" value="ontime" checked="checked" />
-                        <label for="radioOntime">On Time</label>
-
-                        <input type="radio" name="reportType" id="radioLate" value="late"  />
-                        <label for="radioLate">Late</label>
-
-                        <input type="radio" name="reportType" id="radioEarly" value="early"  />
-                        <label for="radioEarly">Early</label>
-
-                        <input type="radio" name="reportType" id="radioOther" value="other"  />
-                        <label for="radioOther">Other</label>
-                </fieldset>
-
-                <label for="comments">Comments</label>
-                <textarea id="comments" value=""></textarea>&nbsp;
             </form>
 
             <div id="msg"></div>
