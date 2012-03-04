@@ -1,6 +1,8 @@
 class ReportsController < ApplicationController
+  layout nil, only: :new
+
   def index
-    @report = Report.new()
+    @report = Report.new(route_id: params[:route_id])
   end
 
   def create
