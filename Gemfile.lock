@@ -1,3 +1,13 @@
+PATH
+  remote: vendor/gems/hrt_bus-0.0.5
+  specs:
+    hrt_bus (0.0.5)
+      activemodel
+      activesupport
+      curb
+      googlestaticmap
+      yajl-ruby
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -72,12 +82,6 @@ GEM
     guard-rspec (0.5.5)
       guard (>= 0.8.4)
     hike (1.2.1)
-    hrt_bus (0.0.4)
-      activemodel
-      activesupport
-      curb
-      googlestaticmap
-      yajl-ruby
     i18n (0.6.0)
     interactive_editor (0.0.10)
       spoon (>= 0.0.1)
@@ -189,7 +193,7 @@ DEPENDENCIES
   factory_girl_rails (~> 1.3.0)
   forgery (= 0.3.12)
   guard-rspec
-  hrt_bus
+  hrt_bus (= 0.0.5)!
   interactive_editor
   jquery-rails
   launchy
