@@ -11,17 +11,14 @@
     <%= javascript_include_tag "jquery.xdomainajax" %>
 	
 <script type="text/javascript">
-    //Declare global variables for latitude and longitude
-    var latitude;
-    var longitude;
-
     $(document).ready(function () {
         //Wire up search button click event handler
-        $('#buttonSearch').click(function () {
+        $("#buttonSearch").click(function () {
             //Get the destination from the text input and URL encode it
             var destination = encodeURI($('#textDestination').val());
             //Create URL for google maps that will find the best route
             var url = "http://maps.google.com/maps?saddr=" + $('input[name=userLat]').val() + "," + $('input[name=userLong]').val() + "&daddr=" + destination + "&dirflg=r";
+
             //Use jQuery to get an HTML document from google maps using the URL
             $.get(url, function (data) {
                 //Create a jQuery object using the response text
@@ -75,46 +72,16 @@
 <body>
     <div data-role="page">
         <div data-role="header">
-            <h3>HRT Bus Report</h3>
+            <h3>Bus Trip Planner</h3>
         </div>
         <div data-role="content">
 
-            <%= render partial: "layouts/errors_for", locals: { object: @report || Report.new } %>
-            <form action="/reports" method="post" data-ajax="false">
-                <label for="routeNumber">Route Number</label>
-                <input id="routeNumber" name="routeNumber" type="text" value=""/>
 
-                <label for="comments">Comments</label>
-                <textarea id="comments" name="comments" value=""></textarea>
-
-                <input type="hidden" name="userLat" value="">
-                <input type="hidden" name="userLong" value="">
-                
-                <input type="submit" value="Report" />
-
-            <form url="www.google.com" action="POST">
-                Destination
+            <form>
+                Where would you like to go?
                 <input id="textDestination" type="text" value=""/>
                 <input id="buttonSearch" type="button" 
                     value="search" />
-            
-                <fieldset data-role="controlgroup">
-                    <legend>Report Type</legend>
-                        <input type="radio" name="reportType" id="radioOntime" value="ontime" checked="checked" />
-                        <label for="radioOntime">On Time</label>
-
-                        <input type="radio" name="reportType" id="radioLate" value="late"  />
-                        <label for="radioLate">Late</label>
-
-                        <input type="radio" name="reportType" id="radioEarly" value="early"  />
-                        <label for="radioEarly">Early</label>
-
-                        <input type="radio" name="reportType" id="radioOther" value="other"  />
-                        <label for="radioOther">Other</label>
-                </fieldset>
-
-                <label for="comments">Comments</label>
-                <textarea id="comments" value=""></textarea>&nbsp;
             </form>
 
             <div id="msg"></div>
