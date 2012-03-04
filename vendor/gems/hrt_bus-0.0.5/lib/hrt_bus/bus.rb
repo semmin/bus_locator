@@ -1,9 +1,10 @@
+require 'awesome_print'
 module HrtBus
   class Bus
     include ActiveModel::Validations
     include ActiveModel::Serializers::JSON
 
-    ATTRIBUTES = [ :id, :time, :direction, :lat, :lon, :route_id ]
+    ATTRIBUTES = [ :id, :time, :direction, :lat, :lon, :route_id, :adherence ]
 
     DIRECTIONS = { "1" => "inbound",
                    "2" => "outbound" }.freeze
@@ -60,18 +61,19 @@ module HrtBus
       parsed = ::CSV.new(curl.body_str, { :headers => true, :skip_blanks => true })
 
       parsed.each do |row|
-        time, date, id, lat_lon, valid, route_id, direction  = row[0],
+        time, date, id, lat_lon, valid, adherence, route_id, direction  = row[0],
                                                                row[1],
                                                                row[2],
                                                                row[3],
                                                                row[4],
+                                                               row[5],
                                                                row[7],
                                                                DIRECTIONS[row[8]]
 
         time     = HrtBus::Parse.time(time, date)
         lat, lon = HrtBus::Parse.geo(lat_lon)
 
-        bus = new(:id => id, :time => time, :direction => direction, :route_id => route_id, :lat => lat, :lon => lon)
+        bus = new(:id => id, :time => time, :direction => direction, :route_id => route_id, :lat => lat, :lon => lon, :adherence => adherence)
 
         buses << bus if bus.valid?
       end
@@ -91,18 +93,19 @@ module HrtBus
       parsed = ::CSV.new(curl.body_str, { :headers => true, :skip_blanks => true })
 
       parsed.each do |row|
-        time, date, id, lat_lon, valid, route_id, direction  = row[0],
+        time, date, id, lat_lon, valid, adherence, route_id, direction  = row[0],
                                                                row[1],
                                                                row[2],
                                                                row[3],
                                                                row[4],
+                                                               row[5],
                                                                row[7],
                                                                DIRECTIONS[row[8]]
 
         time     = HrtBus::Parse.time(time, date)
         lat, lon = HrtBus::Parse.geo(lat_lon)
 
-        buses << new(:id => id, :time => time, :direction => direction, :route_id => route_id, :lat => lat, :lon => lon)
+        buses << new(:id => id, :time => time, :direction => direction, :route_id => route_id, :lat => lat, :lon => lon, :adherence => adherence)
       end
       buses
     end
