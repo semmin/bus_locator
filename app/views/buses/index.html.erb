@@ -124,7 +124,7 @@
   </div>
   <div data-role="content">
     You should take bus <span id="routeNumber"></span> from <span id="startAddress"></span> toward <span id="busEndAddress"></span>.
-    The bus is off by <%= @buses.last.adherence %> minutes.
+    The bus is off by <%= @bus.try(:adherence) %> minutes.
 
     <div id="msg"></div>
     <div id="mapcanvas" style="height: 200px; width: 200px;"></div>
