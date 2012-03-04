@@ -1,122 +1,127 @@
 <script type="text/javascript">
 
-        var directionsDisplay;
+  var directionsDisplay;
 
-        var directionsService = new google.maps.DirectionsService();
+  var directionsService = new google.maps.DirectionsService();
 
-        var map;
+  var map;
 
-        var oldDirections = [];
+  var oldDirections = [];
 
-        var currentDirections = null;
+  var currentDirections = null;
 
-        var start;
+  var start;
 
-        var end;
+  var end;
 
 
 
-        $(document).ready(function () {
+  $(document).ready(function () {
 
-            var busStop = localStorage.getItem("busStop");
+  var busStop = localStorage.getItem("busStop");
 
-            var busEndAddress = localStorage.getItem("busEndAddress");
+  var busEndAddress = localStorage.getItem("busEndAddress");
 
-            var myLat = localStorage.getItem("latitude");
+  var myLat = localStorage.getItem("latitude");
 
-            var myLong = localStorage.getItem("longitude");
+  var myLong = localStorage.getItem("longitude");
 
-            start = myLat + "," + myLong;
+  start = myLat + "," + myLong;
 
-            end = busStop;
+  end = busStop;
 
 
 
-            $("#routeNumber").html(localStorage.getItem("routeNumber"));
+  $("#routeNumber").html(localStorage.getItem("routeNumber"));
 
-            $("#startAddress").html(busStop);
+  $("#startAddress").html(busStop);
 
-            $("#busEndAddress").html(busEndAddress);
+  $("#busEndAddress").html(busEndAddress);
 
 
 
-            var latlng = new google.maps.LatLng(myLat, myLong);
+  var latlng = new google.maps.LatLng(myLat, myLong);
 
-            var myOptions = {
+  var myOptions = {
 
-                zoom: 15,
+  zoom: 13,
 
-                center: latlng,
+  center: latlng,
 
-                mapTypeId: google.maps.MapTypeId.ROADMAP
+  mapTypeId: google.maps.MapTypeId.ROADMAP
 
-            }
+  }
 
-            var mapcanvas = $('#mapcanvas');
+  var mapcanvas = $('#mapcanvas');
 
-            map = new google.maps.Map(mapcanvas[0], myOptions);
+  map = new google.maps.Map(mapcanvas[0], myOptions);
 
+  var busLatlng = new google.maps.LatLng(<%=@bus.lat%>, <%=@bus.lon%>);
+  var marker = new google.maps.Marker({
+    position: busLatlng,
+    map: map,
+    title:"The bus is here!"
+  });
 
+  directionsDisplay = new google.maps.DirectionsRenderer({
 
-            directionsDisplay = new google.maps.DirectionsRenderer({
+  'map': map,
 
-                'map': map,
+  'preserveViewport': true,
 
-                'preserveViewport': true,
+  'draggable': true
 
-                'draggable': true
+  });
 
-            });
 
 
+  google.maps.event.addListener(directionsDisplay, 'directions_changed',
 
-            google.maps.event.addListener(directionsDisplay, 'directions_changed',
+  function () {
 
-      function () {
+  if (currentDirections) {
 
-          if (currentDirections) {
+  oldDirections.push(currentDirections);
 
-              oldDirections.push(currentDirections);
+  }
 
-          }
+  currentDirections = directionsDisplay.getDirections();
 
-          currentDirections = directionsDisplay.getDirections();
+  });
 
-      });
 
 
+  calcRoute();
 
-            calcRoute();
+  });
 
-        });
 
 
+  function calcRoute() {
 
-        function calcRoute() {
+  var request = {
 
-            var request = {
+  origin: start,
 
-                origin: start,
+  destination: end,
 
-                destination: end,
+  travelMode: google.maps.DirectionsTravelMode.DRIVING
 
-                travelMode: google.maps.DirectionsTravelMode.DRIVING
+  };
 
-            };
+  directionsService.route(request, function (response, status) {
 
-            directionsService.route(request, function (response, status) {
+  if (status == google.maps.DirectionsStatus.OK) {
 
-                if (status == google.maps.DirectionsStatus.OK) {
+  directionsDisplay.setDirections(response);
 
-                    directionsDisplay.setDirections(response);
+  }
 
-                }
+  });
 
-            });
+  }
 
-        }
-
-    </script>
+</script>
 
 <div data-role="page">
   <div data-role="header">
@@ -127,6 +132,6 @@
     The bus is off by <%= @bus.try(:adherence) %> minutes.
 
     <div id="msg"></div>
-    <div id="mapcanvas" style="height: 200px; width: 200px;"></div>
+    <div id="mapcanvas" style="height: 400px; width: 400px;"></div>
   </div>
 </div>
