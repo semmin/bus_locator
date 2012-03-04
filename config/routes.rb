@@ -1,6 +1,7 @@
 BusLocator::Application.routes.draw do
 
   resources :buses, only: [:index, :show]
+  resources :reports, only: [:index, :show, :create]
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
