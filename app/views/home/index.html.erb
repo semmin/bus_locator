@@ -47,7 +47,6 @@
         latitude = position.coords.latitude;
         longitude = position.coords.longitude;
 
-<<<<<<< HEAD
         $(document).ready(function() {
             
             if (navigator.geolocation) {
@@ -62,8 +61,7 @@
         function success(position) {
 			$('input[name=userLat]').val(position.coords.latitude);
 			$('input[name=userLong]').val(position.coords.longitude);
-=======
->>>>>>> Implemented the functionality to take the destination from the user and find the recommended route from Google Maps.  Since transit directions are not included in the Google Maps API, needed to scrape the site in order to find the route.  Included a script that enables jQuery to make cross domain requests.  Displayed an alert with the route for testing purposes.
+
           var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
           var myOptions = {
             zoom: 15,
@@ -96,7 +94,7 @@
             <h3>HRT Bus Report</h3>
         </div>
         <div data-role="content">
-<<<<<<< HEAD
+
             <%= render partial: "layouts/errors_for", locals: { object: @report || Report.new } %>
             <form action="/reports" method="post" data-ajax="false">
                 <label for="routeNumber">Route Number</label>
@@ -109,7 +107,7 @@
                 <input type="hidden" name="userLong" value="">
                 
                 <input type="submit" value="Report" />
-=======
+
             <form url="www.google.com" action="POST">
                 Destination
                 <input id="textDestination" type="text" value=""/>
@@ -133,7 +131,6 @@
 
                 <label for="comments">Comments</label>
                 <textarea id="comments" value=""></textarea>&nbsp;
->>>>>>> Implemented the functionality to take the destination from the user and find the recommended route from Google Maps.  Since transit directions are not included in the Google Maps API, needed to scrape the site in order to find the route.  Included a script that enables jQuery to make cross domain requests.  Displayed an alert with the route for testing purposes.
             </form>
 
             <div id="msg"></div>
