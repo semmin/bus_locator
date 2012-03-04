@@ -1,16 +1,132 @@
-<% if @buses.present? %>
-	<% @buses.each do |bus| %>
-		<ul>
-			<li>Vehicle Id:<%= bus.id %></li>
-			<li>Route Id:<%= bus.route_id %></li>
-			<li>Time:<%= bus.time %></li>
-			<li>Lat:<%= bus.lat %></li>
-			<li>Lon:<%= bus.lon %></li>
-			<li>Adherence:<%= bus.adherence %></li>
-			<li>
-					<img src=<%= "./tmp/map_#{bus.id}.png" %> />
-			</li>
-			<li><%= link_to "Report", new_report_path(route_id: bus.route_id) %></li>
-		</ul>
-	<% end %>
-<% end %>
+<script type="text/javascript">
+
+        var directionsDisplay;
+
+        var directionsService = new google.maps.DirectionsService();
+
+        var map;
+
+        var oldDirections = [];
+
+        var currentDirections = null;
+
+        var start;
+
+        var end;
+
+
+
+        $(document).ready(function () {
+
+            var busStop = localStorage.getItem("busStop");
+
+            var busEndAddress = localStorage.getItem("busEndAddress");
+
+            var myLat = localStorage.getItem("latitude");
+
+            var myLong = localStorage.getItem("longitude");
+
+            start = myLat + "," + myLong;
+
+            end = busStop;
+
+
+
+            $("#routeNumber").html(localStorage.getItem("routeNumber"));
+
+            $("#startAddress").html(busStop);
+
+            $("#busEndAddress").html(busEndAddress);
+
+
+
+            var latlng = new google.maps.LatLng(myLat, myLong);
+
+            var myOptions = {
+
+                zoom: 15,
+
+                center: latlng,
+
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+
+            }
+
+            var mapcanvas = $('#mapcanvas');
+
+            map = new google.maps.Map(mapcanvas[0], myOptions);
+
+
+
+            directionsDisplay = new google.maps.DirectionsRenderer({
+
+                'map': map,
+
+                'preserveViewport': true,
+
+                'draggable': true
+
+            });
+
+
+
+            google.maps.event.addListener(directionsDisplay, 'directions_changed',
+
+      function () {
+
+          if (currentDirections) {
+
+              oldDirections.push(currentDirections);
+
+          }
+
+          currentDirections = directionsDisplay.getDirections();
+
+      });
+
+
+
+            calcRoute();
+
+        });
+
+
+
+        function calcRoute() {
+
+            var request = {
+
+                origin: start,
+
+                destination: end,
+
+                travelMode: google.maps.DirectionsTravelMode.DRIVING
+
+            };
+
+            directionsService.route(request, function (response, status) {
+
+                if (status == google.maps.DirectionsStatus.OK) {
+
+                    directionsDisplay.setDirections(response);
+
+                }
+
+            });
+
+        }
+
+    </script>
+
+<div data-role="page">
+  <div data-role="header">
+    <h3>Bus Trip Planner</h3>
+  </div>
+  <div data-role="content">
+    You should take bus <span id="routeNumber"></span> from <span id="startAddress"></span> toward <span id="busEndAddress"></span>.
+    The bus is off by <%= @buses.last.adherence %> minutes.
+
+    <div id="msg"></div>
+    <div id="mapcanvas" style="height: 200px; width: 200px;"></div>
+  </div>
+</div>

@@ -17,7 +17,7 @@
             //Get the destination from the text input and URL encode it
             var destination = encodeURI($('#textDestination').val());
             //Create URL for google maps that will find the best route
-            var url = "http://maps.google.com/maps?saddr=" + $('input[name=userLat]').val() + "," + $('input[name=userLong]').val() + "&daddr=" + destination + "&dirflg=r";
+            var url = "http://maps.google.com/maps?saddr=" + localStorage.getItem("latitude") + "," + localStorage.getItem("longitude") + "&daddr=" + destination + "&dirflg=r";
 
             //Use jQuery to get an HTML document from google maps using the URL
             $.get(url, function (data) {
@@ -26,6 +26,16 @@
                 //Find the route number from the document
                 ///In order to do this, look for an html element that has the transit line style and get the inner HTML
                 var routeNumber = googleDoc.find('.trtline-name').html();
+                localStorage.setItem("routeNumber", routeNumber);
+
+                var busStop = googleDoc.find('.location').html();
+                localStorage.setItem('busStop', busStop);
+
+                var busFinalDestinationContainer = googleDoc.find('.dir-ts-direction');
+                var busElement = busFinalDestinationContainer.find("span:contains('Bus')");
+                var busEndAddress = busElement.siblings("p").find("span").html();
+                localStorage.setItem('busEndAddress', busEndAddress);
+
                 //Redirect to buses and pass the route
                 window.location = '/buses?route_id=' + routeNumber;
             });
@@ -40,8 +50,8 @@
     });
 
         function success(position) {
-			$('input[name=userLat]').val(position.coords.latitude);
-			$('input[name=userLong]').val(position.coords.longitude);
+            localStorage.setItem("latitude", position.coords.latitude);
+            localStorage.setItem("longitude", position.coords.longitude);
 
           var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
           var myOptions = {
@@ -82,9 +92,6 @@
                 <input id="textDestination" type="text" value=""/>
                 <input id="buttonSearch" type="button" 
                     value="search" />
-
-				<input type="hidden" name="userLat" value="">
-                <input type="hidden" name="userLong" value="">
             </form>
 
             <div id="msg"></div>
