@@ -21,7 +21,7 @@
             //Get the destination from the text input and URL encode it
             var destination = encodeURI($('#textDestination').val());
             //Create URL for google maps that will find the best route
-            var url = "http://maps.google.com/maps?saddr=" + latitude + "," + longitude + "&daddr=" + destination + "&dirflg=r";
+            var url = "http://maps.google.com/maps?saddr=" + $('input[name=userLat]').val() + "," + $('input[name=userLong]').val() + "&daddr=" + destination + "&dirflg=r";
             //Use jQuery to get an HTML document from google maps using the URL
             $.get(url, function (data) {
                 //Create a jQuery object using the response text
@@ -29,8 +29,8 @@
                 //Find the route number from the document
                 ///In order to do this, look for an html element that has the transit line style and get the inner HTML
                 var routeNumber = googleDoc.find('.trtline-name').html();
-                //For testing, display an alert with the route number
-                alert("The best route is " + routeNumber);
+                //Redirect to buses and pass the route
+                window.location = '/buses?route_id=' + routeNumber;
             });
         });
 
@@ -41,22 +41,6 @@
         }
         //});
     });
-
-
-    function success(position) {
-        latitude = position.coords.latitude;
-        longitude = position.coords.longitude;
-
-        $(document).ready(function() {
-            
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(success, error);
-            } else {
-                error('Geolocation not supported');
-            }
-            
-        });  
-
 
         function success(position) {
 			$('input[name=userLat]').val(position.coords.latitude);
