@@ -1,4 +1,3 @@
-require 'awesome_print'
 module HrtBus
   class Bus
     include ActiveModel::Validations
